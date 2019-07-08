@@ -10,10 +10,12 @@ export default class App extends React.Component {
     this.state = {
       resultText: ""
     }
+    this.operations = ["del", "+", "-", "x", "/"]
   }
 
   calculateResult(){
     const text = this.state.resultText
+
   }
 
   buttonPressed(text) {  
@@ -34,6 +36,19 @@ export default class App extends React.Component {
         this.setState({
           resultText : text.join('')
         })
+        break
+      case '+':
+      case '-':
+      case 'x':
+      case '/':
+        const lastChar = this.state.resultText.split('').pop()
+
+        if(this.operations.indexOf(lastChar) > 0) return
+
+        if(this.state.text == "" ) return 
+        this.setState({
+          resultText: this.state.resultText + operation
+        })
 
     }
   }
@@ -53,11 +68,10 @@ export default class App extends React.Component {
       rows.push(<View style={styles.row}>{row}</View>)
     }
 //charmaine
-    let operations = ["del", "+", "-", "x", "/"];
     let ops = [];
-    for (let k = 0; k < 4; k++){
-      ops.push(<TouchableOpacity style={styles.btn} onPress={() => this.operate (operations[k])  } >
-        <Text style={[styles.btntext, styles.white]}>{ operations[k] }</Text>
+    for (let k = 0; k < 5; k++){
+      ops.push(<TouchableOpacity style={styles.btn} onPress={() => this.operate(this.operations[k])  } >
+        <Text style={[styles.btntext, styles.white]}>{ this.operations[k] }</Text>
       </TouchableOpacity>);
     }
     
