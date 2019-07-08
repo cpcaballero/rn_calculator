@@ -11,7 +11,7 @@ export default class App extends React.Component {
       resultText: "",
       calculationText: ""
     }
-    this.operations = ["del", "+", "-", "x", "/"]
+    this.operations = ["DEL", "+", "-", "*", "/"]
   }
 
   calculateResult(){
@@ -22,10 +22,23 @@ export default class App extends React.Component {
     })
   }
 
+  validate(){
+    const text = this.state.resultText
+    switch(text.slice(-1)){
+      case '+':
+      case '-':
+      case '*':
+      case '/':
+        return false
+    }
+    return true
+  }
+
+  
   buttonPressed(text) {  
     console.log(text);
     if(text == '='){
-      return this.calculateResult()
+      return this.validate() && this.calculateResult()
     }
     this.setState({
       resultText: this.state.resultText + text
@@ -34,7 +47,7 @@ export default class App extends React.Component {
 
   operate(operation){
     switch(operation){
-      case 'del': 
+      case 'DEL': 
         let text = this.state.resultText.split('')
         text.pop()
         this.setState({
@@ -43,7 +56,7 @@ export default class App extends React.Component {
         break
       case '+':
       case '-':
-      case 'x':
+      case '*':
       case '/':
         const lastChar = this.state.resultText.split('').pop()
 
@@ -65,16 +78,16 @@ export default class App extends React.Component {
     for (let i = 0; i < 4; i++){
       let row = [];
       for (let j = 0; j < 3; j++){
-        row.push(<TouchableOpacity onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
+        row.push(<TouchableOpacity key={ nums[i][j] } onPress={() => this.buttonPressed(nums[i][j])} style={styles.btn}>
           <Text style={styles.btntext}>{ nums[i][j] }</Text>
         </TouchableOpacity>);
       }
-      rows.push(<View style={styles.row}>{row}</View>)
+      rows.push(<View key={ i } style={styles.row}>{row}</View>)
     }
 //charmaine
     let ops = [];
     for (let k = 0; k < 5; k++){
-      ops.push(<TouchableOpacity style={styles.btn} onPress={() => this.operate(this.operations[k])  } >
+      ops.push(<TouchableOpacity key={ this.operations[k] } style={styles.btn} onPress={() => this.operate(this.operations[k])  } >
         <Text style={[styles.btntext, styles.white]}>{ this.operations[k] }</Text>
       </TouchableOpacity>);
     }
@@ -107,12 +120,11 @@ const styles = StyleSheet.create({
   },
   resultText : {
     fontSize : 30,
-    color: 'white'
+    color: 'black'
   },
   btntext : {
     fontSize: 30,
-    borderColor: 'blue',
-    borderWidth: 2
+    color: 'white'
     
   },
   white : {
@@ -134,19 +146,19 @@ const styles = StyleSheet.create({
   },   
   result : {
     flex: 2,
-    backgroundColor: 'red',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'flex-end'
   },
   calculation: {
     flex: 1,
-    backgroundColor: 'green',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'flex-end'
   },
   calculationText : {
     fontSize : 24,
-    color: 'white'
+    color: 'black'
   },
   buttons: {
     flexGrow: 7,
@@ -154,14 +166,14 @@ const styles = StyleSheet.create({
   },
   numbers: {
     flex: 3,
-    backgroundColor: 'yellow'
+    backgroundColor: '#434343'
   },
   operations: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: '#636363',
     color: 'white',
     justifyContent: "space-around",
-    alignItems: 'stretch',
+    alignItems: 'stretch', 
     // borderWidth : 2,
     // borderColor : 'orange'
   }
